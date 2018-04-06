@@ -1,0 +1,105 @@
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <rest tag="Data Management" path="/data">
+        <description>Data management API</description>
+        <get outType="com.ericsson.iot.rest.DeviceDataResponse[]">
+            <description>Returns the full data history for user</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="from" type="query" description="Unix Timestamp in milliseconds starting the results" dataType="number" dataFormat="int64" required="false"></param>
+            <param name="to" type="query" description="Unix Timestamp in milliseconds ending the results" dataType="number" dataFormat="int64" required="false"></param>
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDeviceData(${header.id})"/>
+                <filter>
+                    <simple>${body} == null</simple>
+                    <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                        <constant>404</constant>
+                    </setHeader>
+                </filter>
+            </route>
+        </get>
+        <get uri="/device/{id}" outType="com.ericsson.iot.rest.DeviceDataResponse">
+            <description>Returns the full history of certain device id</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" required="false" />
+            <param name="id" type="path" description="The id of the device to get" dataType="integer"/>
+            <param name="from" type="query" description="Unix Timestamp in milliseconds starting the results" dataType="number" dataFormat="int64" required="false"></param>
+            <param name="to" type="query" description="Unix Timestamp in milliseconds ending the results" dataType="number" dataFormat="int64" required="false"></param>
+            <responseMessage message="Successful response"/>
+            <responseMessage code="404" message="Device not found"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDeviceData(${header.id})"/>
+                <filter>
+                    <simple>${body} == null</simple>
+                    <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                        <constant>404</constant>
+                    </setHeader>
+                </filter>
+            </route>
+        </get>
+        <get uri="/sensor/{id}" outType="com.ericsson.iot.rest.SensorDataResponse">
+            <description>Returns the full history of certain sensor id</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" required="false" />
+            <param name="id" type="path" description="The id of the sensor to get" dataType="integer"/>
+            <param name="from" type="query" description="Unix Timestamp in milliseconds starting the results" dataType="number" dataFormat="int64" required="false"></param>
+            <param name="to" type="query" description="Unix Timestamp in milliseconds ending the results" dataType="number" dataFormat="int64" required="false"></param>
+            <responseMessage message="Successful response"/>
+            <responseMessage code="404" message="Sensor not found"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDeviceData(${header.id})"/>
+                <filter>
+                    <simple>${body} == null</simple>
+                    <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                        <constant>404</constant>
+                    </setHeader>
+                </filter>
+            </route>
+        </get>
+
+        <get uri="/resource/{id}" outType="com.ericsson.iot.rest.ResourceDataResponse">
+            <description>Returns the full history of certain resource id</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" required="false" />
+            <param name="id" type="path" description="The id of the resource to get" dataType="integer"/>
+            <param name="from" type="query" description="Unix Timestamp in milliseconds starting the results" dataType="number" dataFormat="int64" required="false"></param>
+            <param name="to" type="query" description="Unix Timestamp in milliseconds ending the results" dataType="number" dataFormat="int64" required="false"></param>
+            <responseMessage message="Successful response"/>
+            <responseMessage code="404" message="Resource not found"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDeviceData(${header.id})"/>
+                <filter>
+                    <simple>${body} == null</simple>
+                    <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                        <constant>404</constant>
+                    </setHeader>
+                </filter>
+            </route>
+        </get>
+
+
+        <get uri="/smartobject/{deviceId}/{objectId}/{instanceId}/{resourceId}" outType="com.ericsson.iot.rest.ResourceDataResponse">
+            <description>Returns the data of IPSO resource</description>
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" />
+            <param name="deviceId" type="path" description="End point Id" dataType="integer"/>
+            <param name="objectId" type="path" description="OMA object Id" dataType="integer" required="false"/>
+            <param name="instanceId" type="path" description="Instance of this object" dataType="integer" required="false"/>
+            <param name="resourceId" type="path" description="Resource Id of this object" dataType="integer" required="false"/>
+            <param name="from" type="query" description="Unix Timestamp in milliseconds starting the results" dataType="number" dataFormat="int64" required="false"></param>
+            <param name="to" type="query" description="Unix Timestamp in milliseconds ending the results" dataType="number" dataFormat="int64" required="false"></param>
+            <responseMessage message="Successful response"/>
+            <responseMessage code="404" message="Resource not found"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDeviceData(${header.id})"/>
+                <filter>
+                    <simple>${body} == null</simple>
+                    <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                        <constant>404</constant>
+                    </setHeader>
+                </filter>
+            </route>
+        </get>
+
+    </rest>
+</rests>

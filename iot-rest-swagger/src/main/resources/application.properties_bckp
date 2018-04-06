@@ -1,0 +1,25 @@
+logging.config=classpath:logback.xml
+
+# the options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
+camel.springboot.name=ApiSpec
+
+# lets listen on all ports to ensure we can be invoked from the pod IP
+server.address=0.0.0.0
+server.port=9191
+management.address=0.0.0.0
+
+# Binding health checks to an internal port
+management.port=8081
+
+# disable all management enpoints except health
+endpoints.enabled = false
+endpoints.health.enabled = true
+
+#rest end points for the Callback url
+// turn off
+camel.springboot.xmlRests = false
+// scan in the com/foo/routes classpath
+#camel.springboot.xmlRests = classpath:callbackRest.xml
+
+camel.springboot.main-run-controller=true
+camel.component.servlet.mapping.contextPath=/v1/api/*

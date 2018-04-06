@@ -1,0 +1,114 @@
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <rest tag="Resources" path="/resources">
+        <description>Resource operation API</description>
+
+        <get uri="/" outType="com.ericsson.iot.rest.ResourceList">
+            <description>Returns all the resources for a partner</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+
+            <param name="filter" type="query" description="Lucene query string.Example:filter=omaPath:330*" />
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDummyResourceList()"/>
+            </route>
+        </get>
+
+        <get uri="/{id}" outType="com.ericsson.iot.rest.ResourceResponse">
+            <description>Return the specified Resource</description>
+            <param name="id" type="path" description="Internal identifier of the resource" />
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDummyResource()"/>
+            </route>
+        </get>
+
+        <get uri="/{deviceId}/{objectId}/{instanceId}/{resourceId}" outType="java.lang.String">
+            <description>READ operation to resource with OMA format</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="deviceId" type="path" description="End point Id" dataType="string"/>
+            <param name="objectId" type="path" description="OMA object Id" dataType="integer"/>
+            <param name="instanceId" type="path" description="OMA Instance of this object" dataType="integer"/>
+            <param name="resourceId" type="path" description="OMA Resource Id of this object" dataType="integer"/>
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDummyStringValue()"/>
+            </route>
+        </get>
+
+        <post uri="/{deviceId}/{objectId}/{instanceId}/{resourceId}" bindingMode="off">
+            <description>WRITE/EXECUTE and Observe operation to resource with OMA format</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="op" type="query" description="WRITE,EXECUTE,OBSERVE" dataType="string"/>
+            <param name="deviceId" type="path" description="End point Id" dataType="string"/>
+            <param name="objectId" type="path" description="OMA object Id" dataType="integer"/>
+            <param name="instanceId" type="path" description="OMA Instance of this object" dataType="integer"/>
+            <param name="resourceId" type="path" description="OMA Resource Id of this object" dataType="integer"/>
+            <param name="value" type="formData" dataType="string"/>
+            <responseMessage message="Successful response" />
+            <responseMessage  code="204" message="No Content" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </post>
+
+        <post uri="/{resourceId}">
+            <description>WRITE/EXECUTE and Observe operation to resource with internal Id</description>
+            <param name="op" type="query" description="WRITE,EXECUTE,OBSERVE" dataType="string"/>
+            <param name="resourceId" type="path" description="Internal unique resource id" dataType="integer"/>
+            <param name="value" type="formData" dataType="string"/>
+            <responseMessage message="Successful response" />
+            <responseMessage  code="204" message="No Content" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </post>
+
+
+        <!-- JSON Support -->
+        <get uri="/{deviceId}/{objectId}/{instanceId}/" outType="com.ericsson.iot.base.model.LwM2MJson[]">
+            <description>READ operation to multiple resources OMA format</description>
+            <!--<param name="Authorization" type="header" description="Bearer token security parameter" ></param>-->
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="deviceId" type="path" description="End point Id" dataType="string"/>
+            <param name="objectId" type="path" description="OMA object Id" dataType="integer" required="false"/>
+            <param name="instanceId" type="path" description="OMA Instance of this object" dataType="integer" required="false"/>
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <to uri="bean:responseGenerator?method=getDummyLwM2MJson"/>
+            </route>
+        </get>
+
+
+        <post uri="/{deviceId}/{objectId}/{instanceId}" bindingMode="auto" type="com.ericsson.iot.base.model.LwM2MJson[]">
+            <description>WRITE/EXECUTE and Observe operation for multiple resources with OMA format</description>
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="op" type="query" description="WRITE,EXECUTE,OBSERVE" dataType="string"/>
+            <param name="deviceId" type="path" description="End point Id" dataType="string"/>
+            <param name="objectId" type="path" description="OMA object Id" dataType="integer" required="false"/>
+            <param name="instanceId" type="path" description="OMA Instance of this object" dataType="integer" required="false"/>
+            <param name="body" type="body" description="The List of lwM2M Json"/>
+            <responseMessage message="Successful response" />
+            <responseMessage  code="204" message="No Content" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </post>
+
+    </rest>
+</rests>

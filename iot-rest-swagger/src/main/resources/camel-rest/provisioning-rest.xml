@@ -1,0 +1,168 @@
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <rest tag="Provisioning" path="/provisioning">
+        <description>CRUD operations towards the system entities</description>
+
+        <get uri="/devicetype" outType="com.ericsson.iot.base.model.provision.DeviceType[]">
+            <description>Returns the device Types belonging to user</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="filter" type="query" description="Lucene query string.Example:filter=supportedProtocols:mqtt" />
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>200</constant>
+                </setHeader>
+            </route>
+        </get>
+
+        <get uri="/devicetype/{id}" outType="com.ericsson.iot.base.model.provision.DeviceType">
+            <description>Returns the certain device type</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="filter" type="query" description="Lucene query string.Example:filter=supportedProtocols:mqtt" />
+            <param name="id" type="path" description="The device type id as parameter" />
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>200</constant>
+                </setHeader>
+            </route>
+        </get>
+
+        <post uri="/devicetype" >
+            <description>Create the device Type (Profile Service API)</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="filter" type="query" description="Lucene query string.Example:filter=firmware:true" />
+            <param name="id" type="path" description="The device type id as parameter" />
+            <responseMessage message="Successful response" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>200</constant>
+                </setHeader>
+            </route>
+        </post>
+
+        <post uri="/softwares" bindingMode="auto" type="com.ericsson.iot.base.model.Software">
+            <description>Create new software entity in system.</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <responseMessage code="201" message="Software successfully created" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>201</constant>
+                </setHeader>
+            </route>
+        </post>
+
+        <patch uri="/softwares" type="com.ericsson.iot.base.model.Software">
+            <description>Update software entity in system.For example new software version or rule</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <param name="file" type="formData" dataType="string" dataFormat="binary"  required="false"/>
+            <responseMessage code="204" message="Software successfully updated" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </patch>
+
+
+        <delete uri="/softwares/{id}">
+            <description>Removes the entire software from the system</description>
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" required="false" />
+            <param name="id" type="path" description="The software internal Id as parameter" />
+
+            <responseMessage code="204" message="Software successfully removed" />
+            <responseMessage message="Internal Error" code="500"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </delete>
+
+        <delete uri="/softwares/{id}/version/{versionId}">
+            <description>Removes specific version of software from system</description>
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" required="false" />
+            <param name="id" type="path" description="The software internal Id as parameter" />
+
+            <responseMessage code="204" message="Software successfully removed" />
+            <responseMessage message="Internal Error" code="500"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>204</constant>
+                </setHeader>
+            </route>
+        </delete>
+
+
+
+        <post uri="/software-update/{deviceId}/{softwareVersionId}" outType="com.ericsson.iot.rest.SotaResponse">
+            <description>Do SOTA operation</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" />
+            <param name="body" type="body" required="false" />
+            <responseMessage code="201" message="SOTA operation created" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>201</constant>
+                </setHeader>
+            </route>
+        </post>
+
+
+        <get uri="/software-update/{sessionId}" outType="com.ericsson.iot.base.model.BaseResponse">
+            <description>Fetch SOTA status</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <responseMessage message="SOTA operation status" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>200</constant>
+                </setHeader>
+            </route>
+        </get>
+
+
+        <post uri="/firmware-update/{deviceId}/{softwareVersionId}" outType="com.ericsson.iot.rest.SotaResponse">
+            <description>Do FOTA operation</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string" />
+            <param name="body" type="body" required="false" />
+            <responseMessage code="201" message="FOTA operation created" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>201</constant>
+                </setHeader>
+            </route>
+        </post>
+
+
+        <get uri="/firmware-update/{sessionId}" outType="com.ericsson.iot.base.model.BaseResponse">
+            <description>Fetch FOTA status</description>
+
+            <param name="X-Partner-Id" type="header" description="The partner Id parameter" dataType="string"></param>
+            <responseMessage message="FOTA operation status" />
+            <responseMessage message="Not found" code="404"/>
+            <route>
+                <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                    <constant>200</constant>
+                </setHeader>
+            </route>
+        </get>
+
+
+
+
+    </rest>
+</rests>

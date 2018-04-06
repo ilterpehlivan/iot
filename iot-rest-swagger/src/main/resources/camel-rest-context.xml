@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <camelContext id="camelContext-0bc0e0b7-dcce-44d1-8483-d46c9a13d06a"
+        trace="true" xmlns="http://camel.apache.org/schema/spring">
+
+        <!-- REST CONFIGURATION -->
+        <restConfiguration apiContextListing="true"
+            apiContextPath="api-doc" bindingMode="json"
+            component="servlet" contextPath="/api/v1/" enableCORS="true" port="8080">
+
+            <!-- we want json output in pretty mode -->
+            <dataFormatProperty key="prettyPrint" value="true"/>
+            <!-- setup swagger api descriptions -->
+            <apiProperty key="api.version" value="1.0.0"/>
+            <apiProperty key="api.title" value="IoT API Spec"/>
+            <apiProperty key="api.description" value="Specification for IoT APIs"/>
+            <apiProperty key="api.contact.name" value="Ericsson Montreal"/>
+        </restConfiguration>
+        <!-- defines the rest services using the context-path Test /echo -->
+        <!--<rest consumes="application/text" path="/echo" produces="application/text">
+            <description>Echo rest service</description>
+            <get uri="/ping">
+                <description>A ping service</description>
+                <param name="name" type="query" description="You can provide a name" dataType="string" defaultValue="Test"/>
+                <route trace="true">
+                    <transform>
+                        <constant>pong ${header.name}</constant>
+                    </transform>
+                </route>
+            </get>
+        </rest>-->
+    </camelContext>
+</beans>
