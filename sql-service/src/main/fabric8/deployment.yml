@@ -1,0 +1,23 @@
+metadata:
+  annotations:
+    configmap.fabric8.io/update-on-change: sql-config
+spec:
+  replicas: 1
+  template:
+    spec:
+      volumes:
+        - name: config-storage
+          configMap:
+            name: sql-config
+            items:
+            - key: application.properties
+              path: application.properties
+        #- name: data-storage-claim
+         # persistentVolumeClaim:
+          #  claimName: consumer-data
+      containers:
+        - volumeMounts:
+           # - name: data-storage-claim
+            #  mountPath: /consumer
+            - name : config-storage
+              mountPath: /deployments/config

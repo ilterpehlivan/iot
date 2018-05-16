@@ -1,0 +1,37 @@
+{
+  "name": "Test Device",
+  "createdTime": 1526410178542,
+  "lastUpdateTime": 1526410178542,
+  "attributes": {
+    "Msisdn": "12345"
+  },
+  "type": {
+    "id": "8e853ddc-6365-12e2-8163-6522ef8b0000",
+    "name": "TestType",
+    "manufacturer": "Test Manufacturer",
+    "model": "Test Model",
+    "supportedObjects": [
+      {
+        "id": 3,
+        "name": "Device",
+        "description": "This LwM2M Object provides a range of device related information which can be queried by the LwM2M Server, and a device reboot and factory reset function.",
+        "version": "1.0",
+        "multiple": false,
+        "mandatory": true
+      },
+      {
+        "id": 2048,
+        "name": "CmdhPolicy",
+        "description": "This Object provides links to a set of rules associated with a specific CSE that governs the behavior of that CSE regarding rejecting, buffering and sending request or response messages via the Mcc reference point.",
+        "version": "1.0",
+        "multiple": true,
+        "mandatory": false
+      }
+    ],
+    "supportedProtocols": [
+      "COAP",
+      "LWM2M"
+    ],
+    "attributes": {}
+  }
+}

@@ -1,0 +1,37 @@
+@startuml
+
+participant service
+participant "Sql-Rest" as api
+participant app
+database postgre as db
+
+== Initialize ==
+app->app:start
+app->app:loadOMAObjectAndResourcesFromFile()
+app -> db: saveOrUpdate(omaObjects)
+return
+== Create device type ==
+service -> service:build DeviceType Json
+note left: Add smart objects
+service ->api: POST /api/v1/sql/devicetype
+api -> db: store
+return
+api --> service: Success
+== Create Device ==
+service -> api: GET /api/v1/sql/devicetype
+service -> service: build Device Json with devicetype
+'service -> api: GET /api/v1/oma/smartobject?list={3,3303}
+'note left: Get the smart objects\nfrom device type
+service -> api: POST /api/v1/sql/device {device}
+api -> api: add device resources from type
+note left:Use the smart objects\nfrom device type
+api -> db: store
+return OK
+api --> service: 201
+service ->api:GET /api/v1/sql/device/{id}/resources
+service->service: Set resource values
+service->api: PUT /api/v1/sql/resource/{id}/value
+api->db:store
+
+
+@enduml

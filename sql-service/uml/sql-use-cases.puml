@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+:Service: as service <<Interacting Service>>
+(Use stored Oma Objects) as (Use)
+:Sql Microservice: as sqlservice << Application >>
+
+sqlservice -> (Start)
+(Start) -> (load oma objects):include
+
+
+service -> (Create Type)
+service -> (Create device)
+
+(Create device) .> (Create Type):include
+(Create Type) -.> (Use):include
+(Create device) -.> (Create Device Resources): include
+
+'note "This note is connected\nto several objects." as N2
+'(Start) .. N2
+'N2 .. (Use)
+@enduml

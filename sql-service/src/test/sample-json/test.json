@@ -1,0 +1,17 @@
+{
+  id=null,
+  name=
+  'Test Device',
+  type=DeviceType{
+  id=8e853ddc-6364-186f-8163-64a877f90000,
+  name=
+  'null',
+  model=
+  'null',
+  manufacturer=
+  'TEST MANUFACTURER-1',
+  supportedprotocols=[
+  MQTT
+], attributes=null, smartobjects=
+[SmartObject{id=1, name='LwM2M Server', description='This LwM2M Objects provides the data related to a LwM2M Server. A Bootstrap-Server has no such an Object Instance associated to it.', version='1.0', multiple=true, mandatory=true, omaResources=}, SmartObject{id=3, name='Device', description='This LwM2M Object provides a range of device related information which can be queried by the LwM2M Server, and a device reboot and factory reset function.', version='1.0', multiple=false, mandatory=true, omaResources=}, SmartObject{id=2048, name='CmdhPolicy', description='This Object provides links to a set of rules associated with a specific CSE that governs the behavior of that CSE regarding rejecting, buffering and sending request or response messages via the Mcc reference point.', version='1.0', multiple=true, mandatory=false, omaResources=}]}, ownerId='null', lastUpdatedTime=null, profileCreationTime=null, status=CREATED, resources=null, attributes=null
+}
