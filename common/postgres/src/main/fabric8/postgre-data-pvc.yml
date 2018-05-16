@@ -1,0 +1,10 @@
+ metadata:
+    annotations:
+      volume.beta.kubernetes.io/storage-class: standard
+    name: postgres-claim
+ spec:
+     accessModes:
+     - ReadWriteOnce
+     resources:
+       requests:
+         storage: 1Gi
